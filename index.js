@@ -16,7 +16,7 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 // Routes
 app.use('/users', require('./routes/users'));
-app.use('/instructors', require('./routes/instructors')); // Add this line
+app.use('/instructors', require('./routes/instructors'));
 app.use('/dancedata', require('./routes/dancedata'));
 app.use('/danceclasses', require('./routes/danceclasses'));
 app.use('/danceforms', require('./routes/danceforms'));
