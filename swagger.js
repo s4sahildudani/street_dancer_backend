@@ -8,9 +8,19 @@ const options = {
       version: '1.0.0',
       description: 'API documentation for Street Dance Backend'
     },
+    servers: [
+      {
+        url: 'https://street-dancer-backend.vercel.app',
+        description: 'Production server'
+      },
+      {
+        url: 'http://localhost:4000',
+        description: 'Local development server'
+      }
+    ],
     components: {}
   },
-  apis: ['./routes/*.js']
+  apis: ['./routes/*.js', '../routes/*.js'] // Both paths for local and Vercel
 };
 
 const swaggerSpec = swaggerJSDoc(options);

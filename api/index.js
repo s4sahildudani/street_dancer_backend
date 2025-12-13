@@ -28,7 +28,16 @@ app.get('/', (req, res) => {
 });
 
 // Swagger UI
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+// Swagger UI with custom options
+const swaggerUiOptions = {
+  customCss: '.swagger-ui .topbar { display: none }',
+  customSiteTitle: 'Street Dance API',
+  swaggerOptions: {
+    persistAuthorization: true,
+  }
+};
+
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec, swaggerUiOptions));
 
 // Routes
 app.use('/users', require('../routes/users'));
