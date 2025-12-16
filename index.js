@@ -6,13 +6,12 @@ const cors = require('cors');
 
 const app = express();
 
-// Add CORS middleware
 app.use(cors());
 app.use(express.json());
 
 console.log('👋 Welcome Street Dance Backend!');
 
-// Favicon handler - 504 error fix
+// Favicon handler
 app.get('/favicon.ico', (req, res) => {
   res.status(204).end();
 });
@@ -27,15 +26,16 @@ app.get('/', (req, res) => {
   });
 });
 
-// Swagger UI - FIXED VERSION
-app.use('/api-docs', swaggerUi.serve);
-app.get('/api-docs', swaggerUi.setup(swaggerSpec, {
-  customCss: '.swagger-ui .topbar { display: none }',
-  customSiteTitle: 'Street Dance API',
-  swaggerOptions: {
-    persistAuthorization: true,
-  }
-}));
+// SWAGGER UI - SIMPLEST WORKING METHOD
+const CSS_URL = "https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/5.0.0/swagger-ui.min.css";
+app.use('/api-docs', 
+  swaggerUi.serve, 
+  swaggerUi.setup(swaggerSpec, {
+    customCss:
+      '.swagger-ui .opblock .opblock-summary-path-description-wrapper { align-items: center; display: flex; flex-wrap: wrap; gap: 0 10px; padding: 0 10px; width: 100%; }',
+    customCssUrl: CSS_URL,
+  })
+);
 
 // Routes
 app.use('/users', require('./routes/users'));
@@ -64,5 +64,5 @@ if (require.main === module) {
   });
 }
 
-// Export for Vercel Serverless
+// Export for Vercel
 module.exports = app;
