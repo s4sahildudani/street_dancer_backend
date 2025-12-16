@@ -8,21 +8,27 @@ const options = {
       version: '1.0.0',
       description: 'API documentation for Street Dance Backend'
     },
-    servers: [
-      {
-        url: 'https://street-dancer-backend.vercel.app',
-        description: 'Production server'
-      },
-      {
-        url: 'http://localhost:4000',
-        description: 'Local development server'
-      }
-    ],
+    servers: process.env.NODE_ENV === 'production' 
+      ? [
+          {
+            url: 'https://street-dancer-backend.vercel.app',
+            description: 'Production server'
+          }
+        ]
+      : [
+          {
+            url: 'http://localhost:4000',
+            description: 'Local development server'
+          },
+          {
+            url: 'https://street-dancer-backend.vercel.app',
+            description: 'Production server (for testing)'
+          }
+        ],
     components: {
       schemas: {}
     }
   },
-  // Yeh path sahi hai - production me bhi kaam karega
   apis: ['./routes/*.js']
 };
 

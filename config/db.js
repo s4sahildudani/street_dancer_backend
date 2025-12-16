@@ -1,14 +1,15 @@
 require('dotenv').config();
 const { Pool } = require('pg');
 
-// PostgreSQL connection pool
 const pool = new Pool({
-    connectionString: process.env.DATABASE_UR,
+    connectionString: process.env.DATABASE_URL,  
     ssl: {
         rejectUnauthorized: false
     },
-    connectionTimeoutMillis: 5000,  // Timeout after 5 seconds
-    query_timeout: 5000  // Query timeout
+    connectionTimeoutMillis: 10000,  // Increased to 10 seconds for Vercel cold starts
+    query_timeout: 10000,  // Query timeout
+    max: 10,  // Maximum pool connections
+    idleTimeoutMillis: 30000  // Close idle connections after 30 seconds
 });
 
 pool.on('connect', () => {
