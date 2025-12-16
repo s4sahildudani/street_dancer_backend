@@ -14,7 +14,12 @@ app.get('/', (req, res) => {
     res.status(200).json({ message: 'Street Dance Backend API is running', timestamp: new Date().toISOString() });
 });
 
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+// Swagger UI setup - IMPORTANT: Yeh order aur method zaroori hai
+app.use('/api-docs', swaggerUi.serve);
+app.get('/api-docs', swaggerUi.setup(swaggerSpec, {
+    customCss: '.swagger-ui .topbar { display: none }',
+    customSiteTitle: "Street Dance API Docs"
+}));
 
 // Routes (ensure all files are lowercase)
 app.use('/users', require('./routes/users'));

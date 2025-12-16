@@ -18,9 +18,12 @@ const options = {
         description: 'Local development server'
       }
     ],
-    components: {}
+    components: {
+      schemas: {}
+    }
   },
-  apis: ['./routes/*.js', '../routes/*.js'] // Both paths for local and Vercel
+  // Yeh path sahi hai - production me bhi kaam karega
+  apis: ['./routes/*.js']
 };
 
 const swaggerSpec = swaggerJSDoc(options);
