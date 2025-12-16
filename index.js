@@ -1,7 +1,5 @@
 const express = require('express');
 const { poolPromise } = require('./config/db');
-const swaggerUi = require('swagger-ui-express');
-const swaggerSpec = require('./swagger');
 const cors = require('cors');
 
 const app = express();
@@ -22,20 +20,61 @@ app.get('/', (req, res) => {
     status: 'OK', 
     message: 'Street Dance Backend API',
     swagger: '/api-docs',
+    swaggerJson: '/swagger.json',
     timestamp: new Date().toISOString()
   });
 });
 
-// SWAGGER UI - SIMPLEST WORKING METHOD
-const CSS_URL = "https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/5.0.0/swagger-ui.min.css";
-app.use('/api-docs', 
-  swaggerUi.serve, 
-  swaggerUi.setup(swaggerSpec, {
-    customCss:
-      '.swagger-ui .opblock .opblock-summary-path-description-wrapper { align-items: center; display: flex; flex-wrap: wrap; gap: 0 10px; padding: 0 10px; width: 100%; }',
-    customCssUrl: CSS_URL,
-  })
-);
+// Swagger Spec JSON endpoint
+const swaggerSpec = require('./swagger');
+app.get('/swagger.json', (req, res) => {
+  res.setHeader('Content-Type', 'application/json');
+  res.json(swaggerSpec);
+});
+
+// Custom Swagger UI HTML - Self-contained solution
+app.get('/api-docs', (req, res) => {
+  const html = `
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Street Dance API Documentation</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/5.10.0/swagger-ui.min.css" />
+  <style>
+    body { margin: 0; padding: 0; }
+    .topbar { display: none; }
+  </style>
+</head>
+<body>
+  <div id="swagger-ui"></div>
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/5.10.0/swagger-ui-bundle.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/5.10.0/swagger-ui-standalone-preset.min.js"></script>
+  <script>
+    window.onload = function() {
+      const ui = SwaggerUIBundle({
+        url: "/swagger.json",
+        dom_id: '#swagger-ui',
+        deepLinking: true,
+        presets: [
+          SwaggerUIBundle.presets.apis,
+          SwaggerUIStandalonePreset
+        ],
+        plugins: [
+          SwaggerUIBundle.plugins.DownloadUrl
+        ],
+        layout: "StandaloneLayout"
+      });
+      window.ui = ui;
+    };
+  </script>
+</body>
+</html>
+  `;
+  res.send(html);
+});
 
 // Routes
 app.use('/users', require('./routes/users'));
