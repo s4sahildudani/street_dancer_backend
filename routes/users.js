@@ -60,4 +60,64 @@ router.get('/', usersController.getAllUsers);
  */
 router.post('/', usersController.addUser);
 
+/**
+ * @swagger
+ * /users/signup:
+ *   post:
+ *     summary: Send OTP for signup
+ *     tags: [Users]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - email
+ *             properties:
+ *               email:
+ *                 type: string
+ *                 example: john@example.com
+ *     responses:
+ *       200:
+ *         description: OTP sent
+ *       400:
+ *         description: Email required
+ *       500:
+ *         description: Server error
+ */
+router.post('/signup', usersController.signup);
+
+/**
+ * @swagger
+ * /users/verify:
+ *   post:
+ *     summary: Verify OTP
+ *     tags: [Users]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - email
+ *               - otp
+ *             properties:
+ *               email:
+ *                 type: string
+ *                 example: john@example.com
+ *               otp:
+ *                 type: string
+ *                 example: "123456"
+ *     responses:
+ *       200:
+ *         description: OTP verified
+ *       400:
+ *         description: Invalid input or OTP
+ *       500:
+ *         description: Server error
+ */
+router.post('/verify', usersController.verifyOTP);
+
 module.exports = router;
