@@ -95,3 +95,30 @@ exports.addUser = async (req, res) => {
         res.status(500).json({ error: err.message });
     }
 };
+
+exports.login = async (req, res) => {
+    const { email, password } = req.body;
+
+    if (!email || !password) {
+        return res.status(400).json({ error: 'Email and password are required' });
+    }
+
+    try {
+        const pool = await poolPromise;
+        const query = 'SELECT * FROM sd_userprofile WHERE email = @email AND password = @password';
+        const result = await pool.request()
+            .input('email', sql.VarChar, email)
+            .input('password', sql.VarChar, password)
+            .query(query);
+
+        if (result.recordset.length === 0) {
+            return res.status(401).json({ error: 'Invalid email or password' });
+        }
+
+        const user = result.recordset[0];
+        res.json({ message: 'Login successful', user: { id: user.id, username: user.username, email: user.email } });
+    } catch (err) {
+        console.error('❌ login Error:', err);
+        res.status(500).json({ error: err.message });
+    }
+};
