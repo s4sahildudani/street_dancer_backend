@@ -7,7 +7,7 @@ const pool = new Pool({
     rejectUnauthorized: false
   }
 });
-
+// user issue fixed
 async function insertData() {
   try {
     const result = await pool.query(
