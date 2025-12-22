@@ -22,7 +22,7 @@ app.get('/api-docs', swaggerUi.setup(swaggerSpec, {
 }));
 
 // Routes (ensure all files are lowercase)
-app.use('/users', require('./routes/Users'));
+app.use('/users', require('./routes/users'));
 app.use('/instructors', require('./routes/instructors'));
 app.use('/dancedata', require('./routes/dancedata'));
 app.use('/danceclasses', require('./routes/danceclasses'));
