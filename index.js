@@ -77,7 +77,7 @@ app.get('/api-docs', (req, res) => {
 });
 
 // Routes
-app.use('/users', require('./routes/users'));
+app.use('/users', require('./routes/Users'));
 app.use('/instructors', require('./routes/instructors'));
 app.use('/dancedata', require('./routes/dancedata'));
 app.use('/danceclasses', require('./routes/danceclasses'));

@@ -55,7 +55,7 @@ exports.verifyOTP = async (req, res) => {
 exports.getAllUsers = async (req, res) => {
     try {
         const pool = await poolPromise;
-        const result = await pool.request().query('SELECT * FROM sd_userprofile');
+        const result = await pool.request().query('SELECT * FROM sd_Userprofile');
         res.json(result.recordset);
     } catch (err) {
         console.error('❌ getAllUsers Error:', err);
@@ -79,7 +79,7 @@ exports.addUser = async (req, res) => {
     try {
         const pool = await poolPromise;
         
-        const query = 'INSERT INTO sd_userprofile (username, email, phone, password, created_at) VALUES (@name, @email, @phone, @password, CURRENT_TIMESTAMP)';
+        const query = 'INSERT INTO sd_Userprofile (username, email, phone, password, created_at) VALUES (@name, @email, @phone, @password, CURRENT_TIMESTAMP)';
         
         const result = await pool.request()
             .input('name', sql.VarChar, name)
@@ -105,7 +105,7 @@ exports.login = async (req, res) => {
 
     try {
         const pool = await poolPromise;
-        const query = 'SELECT * FROM sd_userprofile WHERE email = @email AND password = @password';
+        const query = 'SELECT * FROM sd_Userprofile WHERE email = @email AND password = @password';
         const result = await pool.request()
             .input('email', sql.VarChar, email)
             .input('password', sql.VarChar, password)
