@@ -75,7 +75,6 @@ router.post('/', usersController.addUser);
  *             required:
  *               - email
  *               - password
- *               - confirmPassword
  *             properties:
  *               email:
  *                 type: string
@@ -87,9 +86,6 @@ router.post('/', usersController.addUser);
  *                 type: string
  *                 example: "1234567890"
  *               password:
- *                 type: string
- *                 example: mypassword123
- *               confirmPassword:
  *                 type: string
  *                 example: mypassword123
  *     responses:

@@ -12,14 +12,14 @@ function generateOTP() {
    SIGNUP + SEND OTP EMAIL
 ========================= */
 exports.signup = async (req, res) => {
-  const { email, name, phone, password, confirmPassword } = req.body;
+  const { email, name, phone, password } = req.body;
 
   if (!email) {
     return res.status(400).json({ error: 'Email is required' });
   }
 
-  if (!password || password !== confirmPassword) {
-    return res.status(400).json({ error: 'Password and confirm password must match' });
+  if (!password) {
+    return res.status(400).json({ error: 'Password is required' });
   }
 
   if (password.length < 6) {
