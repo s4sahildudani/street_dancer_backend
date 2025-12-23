@@ -12,18 +12,10 @@ function generateOTP() {
    SIGNUP + SEND OTP EMAIL
 ========================= */
 exports.signup = async (req, res) => {
-  const { email, name, phone, password } = req.body;
+  const { email } = req.body;
 
   if (!email) {
     return res.status(400).json({ error: 'Email is required' });
-  }
-
-  if (!password) {
-    return res.status(400).json({ error: 'Password is required' });
-  }
-
-  if (password.length < 6) {
-    return res.status(400).json({ error: 'Password must be at least 6 characters' });
   }
 
   const otp = generateOTP();
@@ -34,27 +26,7 @@ exports.signup = async (req, res) => {
   });
 
   try {
-    const pool = await poolPromise;
-
-    // Save user as pending verification
-    const query = `
-      INSERT INTO sd_Userprofile (username, email, phone, password, status, created_at)
-      VALUES (@name, @email, @phone, @password, @status, CURRENT_TIMESTAMP)
-      ON CONFLICT (email)
-      DO UPDATE SET
-        username = @name,
-        phone = @phone,
-        password = @password,
-        status = @status
-    `;
-
-    await pool.request()
-      .input('name', sql.VarChar, name || null)
-      .input('email', sql.VarChar, email)
-      .input('phone', sql.VarChar, phone || null)
-      .input('password', sql.VarChar, password)
-      .input('status', sql.VarChar, 'pending_verification')
-      .query(query);
+    // Send OTP email (user not saved yet)
 
     /* ===== Gmail Safe Email ===== */
     await transporter.sendMail({

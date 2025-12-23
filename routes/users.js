@@ -74,11 +74,43 @@ router.post('/', usersController.addUser);
  *             type: object
  *             required:
  *               - email
+ *             properties:
+ *               email:
+ *                 type: string
+ *                 example: john@example.com
+ *     responses:
+ *       200:
+ *         description: OTP sent
+ *       400:
+ *         description: Email required
+ *       500:
+ *         description: Server error
+ */
+router.post('/signup', usersController.signup);
+
+/**
+ * @swagger
+ * /users/verify:
+ *   post:
+ *     summary: Verify OTP and create account
+ *     tags: [Users]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - email
+ *               - otp
  *               - password
  *             properties:
  *               email:
  *                 type: string
  *                 example: john@example.com
+ *               otp:
+ *                 type: string
+ *                 example: "123456"
  *               name:
  *                 type: string
  *                 example: John Doe
@@ -90,39 +122,7 @@ router.post('/', usersController.addUser);
  *                 example: mypassword123
  *     responses:
  *       200:
- *         description: OTP sent
- *       400:
- *         description: Email and password required
- *       500:
- *         description: Server error
- */
-router.post('/signup', usersController.signup);
-
-/**
- * @swagger
- * /users/verify:
- *   post:
- *     summary: Verify OTP and activate account
- *     tags: [Users]
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             required:
- *               - email
- *               - otp
- *             properties:
- *               email:
- *                 type: string
- *                 example: john@example.com
- *               otp:
- *                 type: string
- *                 example: "123456"
- *     responses:
- *       200:
- *         description: Account verified successfully
+ *         description: Account verified and created successfully
  *       400:
  *         description: Invalid input or OTP
  *       500:
