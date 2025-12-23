@@ -213,7 +213,7 @@ exports.verifyOTP = async (req, res) => {
 };
 
 /* =========================
-   LOGIN (Only Verified)
+   LOGIN (Allow login, include verified status)
 ========================= */
 exports.login = async (req, res) => {
   const { email, password } = req.body;
@@ -228,21 +228,25 @@ exports.login = async (req, res) => {
     const result = await pool.request()
       .input('email', sql.VarChar, email)
       .input('password', sql.VarChar, password)
-      .input('status', sql.VarChar, 'verified')
       .query(`
-        SELECT id, username, email, phone
+        SELECT id, username, email, phone, status
         FROM sd_Userprofile
-        WHERE email = @email AND password = @password AND status = @status
+        WHERE email = @email AND password = @password
       `);
 
     if (result.recordset.length === 0) {
-      return res.status(401).json({ error: 'Invalid credentials or account not verified' });
+      return res.status(401).json({ error: 'Invalid credentials' });
     }
 
-    res.json({
-      message: 'Login successful',
-      user: result.recordset[0]
-    });
+    const user = result.recordset[0];
+    const verified = user.status === 'verified';
+
+    const response = {
+      message: verified ? 'Login successful' : 'Please verify your email',
+      verified: verified
+    };
+
+    res.json(response);
 
   } catch (err) {
     console.error('❌ Login Error:', err);

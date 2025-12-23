@@ -138,7 +138,7 @@ router.post('/verify', usersController.verifyOTP);
  * @swagger
  * /users/login:
  *   post:
- *     summary: Login user (only verified users allowed)
+ *     summary: Login user
  *     tags: [Users]
  *     requestBody:
  *       required: true
@@ -159,10 +159,21 @@ router.post('/verify', usersController.verifyOTP);
  *     responses:
  *       200:
  *         description: Login successful
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Login successful"
+ *                 verified:
+ *                   type: boolean
+ *                   example: true
  *       400:
  *         description: Email and password required
  *       401:
- *         description: Invalid credentials or account not verified
+ *         description: Invalid credentials
  *       500:
  *         description: Server error
  */
